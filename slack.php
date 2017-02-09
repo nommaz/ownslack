@@ -58,7 +58,7 @@ function sendMessage($username = 'guest', $msg = '', $icon = '', $channel = '', 
             "thumb_url" => "https://image.flaticon.com/teams/1-freepik.jpg",
             "footer" => "Vimal Patel",
             "footer_icon" => "https://image.flaticon.com/teams/1-freepik.jpg",
-            "ts" => 123456789
+            "ts" => time()
         )
     );
     $message = array('payload' => json_encode($data));
