@@ -14,6 +14,7 @@ while ($row = mysqli_fetch_assoc($res)) {
     } else {
         $link = "https://docs.hugin.co/index.php/apps/files/?fileid=" . $row['object_id'];
     }
+    $link = "<$link | " . $row['name'] . ">";
 
     $size = formatBytes($row['size']);
     $channel = '';
@@ -21,13 +22,13 @@ while ($row = mysqli_fetch_assoc($res)) {
         $channel = 'general'; // TODO : get firstname(folder name) from $row['path'] and then lookup the channel name from other table.. if not found then do not pass channel
     }
 
-    sendMessage($msg, $icon, $channel);
+    sendMessage($msg, $icon, $channel, $link);
 }
 
-function sendMessage($msg = '', $icon = '', $channel = '') {
+function sendMessage($msg = '', $icon = '', $channel = '', $link = '') {
     // Make your message
     $data = array(
-        'text' => $msg,
+        'text' => $link . " " . $msg,
         "username" => "Vedant Test",
         "icon_emoji" => $icon,
         "link_names" => 1
