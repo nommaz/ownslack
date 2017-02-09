@@ -5,6 +5,8 @@ include_once './config.php';
 $q = "SELECT * FROM `hg_patel` LIMIT 1";
 $res = mysqli_query($conn, $q);
 while ($row = mysqli_fetch_assoc($res)) {
+    $username = $row['displayname'];
+
     $icon = BASE_URL . $row['mimetype'] . "." . IMAGE_EXT;
     $msg = $row['type'];
 
@@ -22,14 +24,14 @@ while ($row = mysqli_fetch_assoc($res)) {
         $channel = 'general'; // TODO : get firstname(folder name) from $row['path'] and then lookup the channel name from other table.. if not found then do not pass channel
     }
 
-    sendMessage($msg, $icon, $channel, $link);
+    sendMessage($username, $msg, $icon, $channel, $link);
 }
 
-function sendMessage($msg = '', $icon = '', $channel = '', $link = '') {
+function sendMessage($username = 'guest', $msg = '', $icon = '', $channel = '', $link = '') {
     // Make your message
     $data = array(
         'text' => $link . " " . $msg,
-        "username" => "Vedant Test",
+        "username" => $username,
         "icon_emoji" => $icon,
         "link_names" => 1
     );
