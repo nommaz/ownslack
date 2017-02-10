@@ -31,7 +31,13 @@ while ($row = mysqli_fetch_assoc($res)) {
     }
     $result = sendMessage($username, $msg, $icon, $channel, $link);
     if ($result) {
-        
+        $files = glob('max_activity_id/*');
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                unlink($file);
+            }
+        }
+        fopen("max_activity_id/" . $row['activity_id'], 'w');
     }
 }
 
