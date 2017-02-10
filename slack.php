@@ -21,9 +21,14 @@ while ($row = mysqli_fetch_assoc($res)) {
     $size = formatBytes($row['size']);
     $channel = '';
     if ($row['type'] == 'file_created' || $row['type'] == 'file_changed') {
-        $channel = 'general'; // TODO : get firstname(folder name) from $row['path'] and then lookup the channel name from other table.. if not found then do not pass channel
+        $pathArr = explode("/", $row['path']);
+        if($pathArr[0]!=''){
+            $channel = $pathArr[0];
+        }else if($pathArr[1]!=''){
+            $channel = $pathArr[1];
+        }
+        $channel = str_replace("#", "", $channel);
     }
-
     sendMessage($username, $msg, $icon, $channel, $link);
 }
 

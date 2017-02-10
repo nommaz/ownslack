@@ -20,3 +20,10 @@ define('SLACK_WEBHOOK', 'https://hooks.slack.com/services/T435ERFNH/B430W4DPV/Bm
 define("DEFAULT_CHANNEL", "#general");
 define("BASE_URL", "https://docs.hugin.co/core/img/fileicons/");
 define("IMAGE_EXT", "png");
+
+$channel_lookup = array(
+    'Donanım' => 'devhw',
+    'Devops' => 'opstsm',
+    'Pazarlama' => 'pazar',
+    'Satış' => 'pazar'
+);
