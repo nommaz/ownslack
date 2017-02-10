@@ -27,3 +27,8 @@ $channel_lookup = array(
     'Pazarlama' => 'pazar',
     'Satış' => 'pazar'
 );
+$monitor_used_id = 'vedat@hugin.com.tr';
+
+$dir = 'max_activity_id';
+$files1 = scandir($dir);
+$last_max_idorder = $files1[2];
