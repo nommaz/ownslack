@@ -2,7 +2,15 @@
 
 include_once './config.php';
 
-$q = "SELECT * FROM `hg_patel`WHERE affecteduser = '$monitor_used_id' and activity_id > $last_max_idorder ORDER BY activity_id desc;";
+$q = "SELECT  activity_id, timestamp, object_id, displayname, type, ".
+     "  oc_filecache.name, file as path, size, oc_filecache.mimetype ".
+     "FROM oc_activity ".
+     "  INNER JOIN hg_users on user = uid ".
+     "  INNER JOIN oc_filecache on object_id = fileid ".
+     "WHERE affecteduser = '$monitor_used_id' and activity_id > $last_max_id ".
+     "ORDER BY activity_id desc;";
+
+$q = "SELECT * FROM `hg_patel`WHERE affecteduser = '$monitor_used_id' and activity_id > $last_max_id ORDER BY activity_id desc;";
 $res = mysqli_query($conn, $q);
 while ($row = mysqli_fetch_assoc($res)) {
     $username = $row['displayname'];
