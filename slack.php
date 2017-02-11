@@ -22,12 +22,12 @@ while ($row = mysqli_fetch_assoc($res)) {
     $channel = '';
     if ($row['type'] == 'file_created' || $row['type'] == 'file_changed') {
         $pathArr = explode("/", $row['path']);
-        if ($pathArr[0] != '') {
-            $channel = $pathArr[0];
-        } else if ($pathArr[1] != '') {
-            $channel = $pathArr[1];
-        }
-        $channel = str_replace("#", "", $channel);
+        unset($pathArr[count($pathArr) - 1]);
+
+        $channelKey = implode("/", $pathArr);
+        $channelname = $channel_lookup[$channelKey . "/"];
+        
+        $channel = str_replace("#", "", $channelname);
     }
     $result = sendMessage($username, $msg, $icon, $channel, $link);
     if ($result) {
