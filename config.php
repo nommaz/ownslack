@@ -80,8 +80,8 @@ $channel_lookup = array(
     '/Yazılım/_VX675/' => 'devvx',
     '/Yazılım/' => 'dev'
 );
-$monitor_used_id = 'vedat@hugin.com.tr';
+$monitor_used_id = 'email@address.com';
 
 $dir = 'max_activity_id';
 $files1 = scandir($dir);
-$last_max_idorder = $files1[2];
+$last_max_id = $files1[2];
