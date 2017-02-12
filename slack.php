@@ -17,19 +17,19 @@ while ($row = mysqli_fetch_assoc($res)) {
 
     $icon = BASE_URL . $row['mimetype'] . "." . IMAGE_EXT;
 
-    /* echo "<pre>activity id = ";
+    echo "<pre>activity id = ";
     print_r($row['activity_id']);
-    echo "<pre>icon = ";
+    echo "  ---- icon = ";
     print_r($icon);
-    echo "</pre>"; */
-    
+
+
     $linkMimearr = array(4, 10, 12, 20, 100, 30, 31, 44, 42, 46, 55, 59, 60, 62, 76, 80, 81, 82, 85, 91, 99, 107, 108, 110);
     if (in_array($row['mimetype'], $linkMimearr)) {
         $link = "https://docs.hugin.co/index.php/apps/onlyoffice/" . $row['object_id'];
     } else {
         $link = "https://docs.hugin.co/index.php/apps/files/?fileid=" . $row['object_id'];
     }
-    $link = "<$link | " . $row['name'] . ">";
+    $link = "<$link | " . $row['path'] . ">";
 
     $size = formatBytes($row['size']);
     $channel = '';
@@ -40,7 +40,7 @@ while ($row = mysqli_fetch_assoc($res)) {
         $channelKey = implode("/", $pathArr);
         $channelname = findChannelName($channel_lookup, $channelKey . "/");
         $channel = str_replace("#", "", $channelname);
-        echo "<pre>Channel Selected = ";
+        echo "  ---- Channel Selected = ";
         print_r($channel);
         echo "</pre>";
     }
@@ -60,37 +60,37 @@ while ($row = mysqli_fetch_assoc($res)) {
 function sendMessage($username = 'guest', $msg = '', $icon = '', $channel = '') {
     // Make your message
     $data = array(
-        'text' => $msg,
+//        'text' => $msg,
         "username" => $username,
-        "icon_emoji" => $icon,
+        "icon_url" => $icon,
         "link_names" => 1
     );
     if (trim($channel) != '') {
         $data["channel"] = $channel;
     }
-    /* $data['attachments'] = array(
-      array(
-      'fallback' => 'Required plain-text summary of the attachment.',
-      "color" => "#ff00ff",
-      "pretext" => "Optional text that appears above the attachment block",
-      "author_name" => "Bobby Tables",
-      "author_link" => "https://www.google.com",
-      "author_icon" => "http://icons.iconarchive.com/icons/paomedia/small-n-flat/1024/sign-check-icon.png",
-      "title" => "Attachment Title",
-      "title_link" => "https://www.heatandplumb.com/brochure/page2.pdf",
-      "text" => "Optional 1 text that appears within the attachment",
-      "fields" => array(
-      "title" => "Priority",
-      "value" => "High",
-      "short" => false
-      ),
-      "image_url" => "http://blog.iconfinder.com/wp-content/uploads/2014/03/1394141400_eye_black_circle1.png.pagespeed.ce.ly0J4jWC8V.png",
-      "thumb_url" => "https://image.flaticon.com/teams/1-freepik.jpg",
-      "footer" => "Vimal Patel",
-      "footer_icon" => "https://image.flaticon.com/teams/1-freepik.jpg",
-      "ts" => time()
-      )
-      ); */
+    $data['attachments'] = array(
+        array(
+//            'fallback' => 'Required plain-text summary of the attachment.',
+//            "color" => "#ff00ff",
+//            "pretext" => "Optional text that appears above the attachment block",
+//            "author_name" => "Bobby Tables",
+//            "author_link" => "https://www.google.com",
+//            "author_icon" => $icon,
+//            "title" => "Attachment Title",
+//            "title_link" => "https://www.heatandplumb.com/brochure/page2.pdf",
+            "text" => $msg,
+            "fields" => array(
+                "title" => "Priority",
+                "value" => "High",
+                "short" => true
+            ),
+            "image_url" => $icon,
+//            "thumb_url" => $icon,
+//            "footer" => "Vimal Patel",
+//            "footer_icon" => "https://image.flaticon.com/teams/1-freepik.jpg",
+//            "ts" => time()
+        )
+    );
     $message = array('payload' => json_encode($data));
     // Use curl to send your message
     $c = curl_init(SLACK_WEBHOOK);
