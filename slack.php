@@ -2,13 +2,13 @@
 
 include_once './config.php';
 
-$q = "SELECT  activity_id, timestamp, object_id, displayname, type, ".
-     "  oc_filecache.name, file as path, size, oc_filecache.mimetype ".
-     "FROM oc_activity ".
-     "  INNER JOIN hg_users on user = uid ".
-     "  INNER JOIN oc_filecache on object_id = fileid ".
-     "WHERE affecteduser = '$monitor_used_id' and activity_id > $last_max_id ".
-     "ORDER BY activity_id desc;";
+$q = "SELECT  activity_id, timestamp, object_id, displayname, type, " .
+        "  oc_filecache.name, file as path, size, oc_filecache.mimetype " .
+        "FROM oc_activity " .
+        "  INNER JOIN hg_users on user = uid " .
+        "  INNER JOIN oc_filecache on object_id = fileid " .
+        "WHERE affecteduser = '$monitor_used_id' and activity_id > $last_max_id " .
+        "ORDER BY activity_id desc;";
 
 $q = "SELECT * FROM `hg_patel`WHERE affecteduser = '$monitor_used_id' and activity_id > $last_max_id ORDER BY activity_id desc;";
 $res = mysqli_query($conn, $q);
@@ -33,9 +33,12 @@ while ($row = mysqli_fetch_assoc($res)) {
         unset($pathArr[count($pathArr) - 1]);
 
         $channelKey = implode("/", $pathArr);
-        $channelname = $channel_lookup[$channelKey . "/"];
-        
+        $channelname = findChannelName($channel_lookup, $channelKey . "/");
         $channel = str_replace("#", "", $channelname);
+        echo "<pre>Channel Selected = ";
+        print_r($channel);
+        echo "</pre>";
+        
     }
     $result = sendMessage($username, $msg, $icon, $channel, $link);
     if ($result) {
@@ -99,4 +102,17 @@ function formatBytes($size, $precision = 2) {
     $suffixes = array('', 'KB', 'MB', 'GB', 'TB');
 
     return round(pow(1024, $base - floor($base)), $precision) . ' ' . $suffixes[floor($base)];
+}
+
+function findChannelName($channel_lookup, $path) {
+    if (!key_exists($path, $channel_lookup)) {
+        $path = rtrim($path, "/");
+        $pathArr = explode("/", $path);
+        unset($pathArr[count($pathArr) - 1]);
+        $channelKey = implode("/", $pathArr);
+        
+        return findChannelName($channel_lookup, $channelKey . "/");
+    } else {
+        return $channel_lookup[$path];
+    }
 }
