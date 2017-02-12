@@ -8,16 +8,21 @@ $q = "SELECT  activity_id, timestamp, object_id, displayname, type, " .
         "  INNER JOIN hg_users on user = uid " .
         "  INNER JOIN oc_filecache on object_id = fileid " .
         "WHERE affecteduser = '$monitor_used_id' and activity_id > $last_max_id " .
-        "ORDER BY activity_id desc;";
+        "ORDER BY activity_id ASC;";
 
-$q = "SELECT * FROM `hg_patel`WHERE affecteduser = '$monitor_used_id' and activity_id > $last_max_id ORDER BY activity_id desc;";
+$q = "SELECT * FROM `hg_patel`WHERE affecteduser = '$monitor_used_id' and activity_id > $last_max_id ORDER BY activity_id ASC;";
 $res = mysqli_query($conn, $q);
 while ($row = mysqli_fetch_assoc($res)) {
     $username = $row['displayname'];
 
     $icon = BASE_URL . $row['mimetype'] . "." . IMAGE_EXT;
-    $msg = $row['type'];
 
+    /* echo "<pre>activity id = ";
+    print_r($row['activity_id']);
+    echo "<pre>icon = ";
+    print_r($icon);
+    echo "</pre>"; */
+    
     $linkMimearr = array(4, 10, 12, 20, 100, 30, 31, 44, 42, 46, 55, 59, 60, 62, 76, 80, 81, 82, 85, 91, 99, 107, 108, 110);
     if (in_array($row['mimetype'], $linkMimearr)) {
         $link = "https://docs.hugin.co/index.php/apps/onlyoffice/" . $row['object_id'];
@@ -38,9 +43,9 @@ while ($row = mysqli_fetch_assoc($res)) {
         echo "<pre>Channel Selected = ";
         print_r($channel);
         echo "</pre>";
-        
     }
-    $result = sendMessage($username, $msg, $icon, $channel, $link);
+    $msg = $size . " " . $link . " " . $row['type'];
+    $result = sendMessage($username, $msg, $icon, $channel);
     if ($result) {
         $files = glob('max_activity_id/*');
         foreach ($files as $file) {
@@ -52,10 +57,10 @@ while ($row = mysqli_fetch_assoc($res)) {
     }
 }
 
-function sendMessage($username = 'guest', $msg = '', $icon = '', $channel = '', $link = '') {
+function sendMessage($username = 'guest', $msg = '', $icon = '', $channel = '') {
     // Make your message
     $data = array(
-        'text' => $link . " " . $msg,
+        'text' => $msg,
         "username" => $username,
         "icon_emoji" => $icon,
         "link_names" => 1
@@ -110,7 +115,7 @@ function findChannelName($channel_lookup, $path) {
         $pathArr = explode("/", $path);
         unset($pathArr[count($pathArr) - 1]);
         $channelKey = implode("/", $pathArr);
-        
+
         return findChannelName($channel_lookup, $channelKey . "/");
     } else {
         return $channel_lookup[$path];
