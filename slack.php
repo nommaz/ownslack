@@ -62,8 +62,8 @@ function sendMessage($username = 'guest', $msg = '', $icon = '', $channel = '') 
     $data = array(
 //        'text' => $msg,
         "username" => $username,
-        "icon_url" => $icon,
-        "link_names" => 1
+//        "icon_url" => $icon,
+        "link_names" => true
     );
     if (trim($channel) != '') {
         $data["channel"] = $channel;
