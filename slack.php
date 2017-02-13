@@ -2,13 +2,14 @@
 
 include_once './config.php';
 
-$q = "SELECT  activity_id, timestamp, object_id, displayname, type, " .
-        "  oc_filecache.name, file as path, size, oc_filecache.mimetype " .
-        "FROM oc_activity " .
-        "  INNER JOIN hg_users on user = uid " .
-        "  INNER JOIN oc_filecache on object_id = fileid " .
-        "WHERE affecteduser = '$monitor_used_id' and activity_id > $last_max_id " .
-        "ORDER BY activity_id ASC;";
+$q = " SELECT  max(activity_id) AS activity_id, max(TIMESTAMP) AS timestamp, object_id, displayname, type, ".
+     "         oc_filecache.name, FILE AS path, size, oc_filecache.mimetype ".
+     " FROM oc_activity ".
+     "  INNER JOIN hg_users ON USER = uid ".
+     "  INNER JOIN oc_filecache ON object_id = fileid ".
+     " WHERE affecteduser = '$monitor_used_id' AND activity_id > $last_max_id ".
+     " GROUP BY object_id, displayname, type, name, file , size, mimetype " .
+     " ORDER BY activity_id ASC;";
 
 $q = "SELECT * FROM `hg_patel`WHERE affecteduser = '$monitor_used_id' and activity_id > $last_max_id ORDER BY activity_id ASC;";
 $res = mysqli_query($conn, $q);
