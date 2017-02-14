@@ -30,7 +30,6 @@ while ($row = mysqli_fetch_assoc($res)) {
     } else {
         $link = "https://docs.hugin.co/index.php/apps/files/?fileid=" . $row['object_id'];
     }
-    $link = "<$link | " . $row['path'] . ">";
 
     $size = formatBytes($row['size']);
     $channel = '';
@@ -45,8 +44,17 @@ while ($row = mysqli_fetch_assoc($res)) {
         print_r($channel);
         echo "</pre>";
     }
-    $msg = $size . " " . $link . " " . $row['type'];
-    $result = sendMessage($username, $msg, $icon, $channel);
+
+    $srchType = array('file_created', 'file_changed');
+    $rplType = array('created a file', 'changed a file');
+    $pretext = str_replace($srchType, $rplType, $row['type']);
+    $pathArr = explode("/", $row['path']);
+    unset($pathArr[count($pathArr) - 1]);
+
+    $remaining_path = implode("/", $pathArr);
+
+    $footer_msg = $size . " " . $remaining_path;
+    $result = sendMessage($username, $pretext, $icon, $channel, $row['name'], $link, $footer_msg);
     if ($result) {
         $files = glob('max_activity_id/*');
         foreach ($files as $file) {
@@ -58,7 +66,7 @@ while ($row = mysqli_fetch_assoc($res)) {
     }
 }
 
-function sendMessage($username = 'guest', $msg = '', $icon = '', $channel = '') {
+function sendMessage($username = 'guest', $pretext = '', $icon = '', $channel = '', $file_name, $file_link, $footer_msg) {
     // Make your message
     $data = array(
 //        'text' => $msg,
@@ -73,22 +81,22 @@ function sendMessage($username = 'guest', $msg = '', $icon = '', $channel = '') 
         array(
 //            'fallback' => 'Required plain-text summary of the attachment.',
 //            "color" => "#ff00ff",
-//            "pretext" => "Optional text that appears above the attachment block",
+            "pretext" => $pretext,
 //            "author_name" => "Bobby Tables",
 //            "author_link" => "https://www.google.com",
 //            "author_icon" => $icon,
-//            "title" => "Attachment Title",
-//            "title_link" => "https://www.heatandplumb.com/brochure/page2.pdf",
-            "text" => $msg,
-            "fields" => array(
-                "title" => "Priority",
-                "value" => "High",
-                "short" => true
-            ),
-            "image_url" => $icon,
+            "title" => $file_name,
+            "title_link" => $file_link,
+//            "text" => $msg,
+//            "fields" => array(
+//                "title" => "Priority",
+//                "value" => "High",
+//                "short" => true
+//            ),
+//            "image_url" => $icon,
 //            "thumb_url" => $icon,
-//            "footer" => "Vimal Patel",
-//            "footer_icon" => "https://image.flaticon.com/teams/1-freepik.jpg",
+            "footer" => $footer_msg,
+            "footer_icon" => $icon
 //            "ts" => time()
         )
     );
