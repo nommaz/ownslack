@@ -11,7 +11,8 @@ $q = " SELECT  max(activity_id) AS activity_id, max(TIMESTAMP) AS timestamp, obj
      " GROUP BY object_id, displayname, type, name, file , size, mimetype " .
      " ORDER BY activity_id ASC;";
 
-$q = "SELECT * FROM `hg_patel`WHERE affecteduser = '$monitor_used_id' and activity_id > $last_max_id ORDER BY activity_id ASC;";
+//$q = "SELECT * FROM `hg_patel`WHERE affecteduser = '$monitor_used_id' and activity_id > $last_max_id ORDER BY activity_id ASC;";
+
 $res = mysqli_query($conn, $q);
 while ($row = mysqli_fetch_assoc($res)) {
     $username = $row['displayname'];
@@ -24,7 +25,7 @@ while ($row = mysqli_fetch_assoc($res)) {
     print_r($icon);
 
 
-    $linkMimearr = array(4, 10, 12, 20, 100, 30, 31, 44, 42, 46, 55, 59, 60, 62, 76, 80, 81, 82, 85, 91, 99, 107, 108, 110);
+    $linkMimearr = array(4, 10, 12, 20, 100, 30, 44, 42, 46, 55, 59, 60, 62, 76, 80, 81, 82, 91, 107, 110);
     if (in_array($row['mimetype'], $linkMimearr)) {
         $link = "https://docs.hugin.co/index.php/apps/onlyoffice/" . $row['object_id'];
     } else {
@@ -67,11 +68,10 @@ while ($row = mysqli_fetch_assoc($res)) {
 }
 
 function sendMessage($username = 'guest', $pretext = '', $icon = '', $channel = '', $file_name, $file_link, $footer_msg) {
-    // Make your message
     $data = array(
-//        'text' => $msg,
+//      'text' => $msg,
         "username" => $username,
-//        "icon_url" => $icon,
+//      "icon_url" => $icon,
         "link_names" => true
     );
     if (trim($channel) != '') {
@@ -79,25 +79,13 @@ function sendMessage($username = 'guest', $pretext = '', $icon = '', $channel = 
     }
     $data['attachments'] = array(
         array(
-//            'fallback' => 'Required plain-text summary of the attachment.',
-//            "color" => "#ff00ff",
+//          "color" => "#ff00ff",
             "pretext" => $pretext,
-//            "author_name" => "Bobby Tables",
-//            "author_link" => "https://www.google.com",
-//            "author_icon" => $icon,
             "title" => $file_name,
             "title_link" => $file_link,
-//            "text" => $msg,
-//            "fields" => array(
-//                "title" => "Priority",
-//                "value" => "High",
-//                "short" => true
-//            ),
-//            "image_url" => $icon,
-//            "thumb_url" => $icon,
             "footer" => $footer_msg,
             "footer_icon" => $icon
-//            "ts" => time()
+//          "ts" => time()
         )
     );
     $message = array('payload' => json_encode($data));
