@@ -21,6 +21,12 @@ define("DEFAULT_CHANNEL", "#general");
 define("BASE_URL", "<url where you have your file icons>");
 define("IMAGE_EXT", "png");
 
+define("WEBDAV_PATH", "https://docs.hugin.co/remote.php/webdav");
+define("WEBDAV_USERNAME", "vimal");
+define("WEBDAV_PASSWORD", "patel");
+define("TRELLO_TOKEN", "b0e802d8b59197687997160ef4e6661f0fc1c5c2b2d1f8e9d0c30683bd1a4395");
+define("TRELLO_KEY", "db7a52bc8461a23a6b6b2a68618abb62");
+
 $channel_lookup = array(
     '/Dir1/Subdir1/Subdir2' => 'subdir2',
     '/Dir1/Subdir1/' => 'subdir1',
