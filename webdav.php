@@ -60,9 +60,6 @@ while ($row = mysqli_fetch_assoc($res)) {
             }
         }
 
-        /* TODO - this id is static for testing  - REMOVE when go live */
-        $cardId = '5pJ8RSaJ';
-
         if ($cardId != '') {
             $client = new Client();
             $client->authenticate(TRELLO_KEY, TRELLO_TOKEN, Client::AUTH_URL_CLIENT_ID);
