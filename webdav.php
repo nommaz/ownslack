@@ -1,4 +1,5 @@
 <?php
+
 ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -59,6 +60,10 @@ while ($row = mysqli_fetch_assoc($res)) {
                 }
             }
         }
+
+        //append header on description
+        $trello_header = str_replace("{{object_id}}", $row['object_id'], $trello_header);
+        $description = $trello_header . "\n" . $description;
 
         if ($cardId != '') {
             $client = new Client();

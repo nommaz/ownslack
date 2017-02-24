@@ -37,3 +37,5 @@ $monitor_used_id = 'email@address.com';
 $dir = 'max_activity_id';
 $files1 = scandir($dir);
 $last_max_id = $files1[2];
+
+$trello_header='Content from docs\.hugin\.co [Edit](https://docs.hugin.co/index.php/apps/files/?fileid={{object_id}})';
