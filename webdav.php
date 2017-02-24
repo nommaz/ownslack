@@ -27,7 +27,7 @@ $res = mysqli_query($conn, $q);
 while ($row = mysqli_fetch_assoc($res)) {
     if ($row['path'] != '' && $row['name'] != '') {
 
-        $c = curl_init(WEBDAV_PATH . $row['path'] . "/" . $row['name']);
+        $c = curl_init(WEBDAV_PATH . $row['path']);
         curl_setopt($c, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($c, CURLOPT_POST, false);
