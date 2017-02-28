@@ -52,7 +52,7 @@ while ($row = mysqli_fetch_assoc($res)) {
                 $cardUrl = str_replace("/c/", "", $cardUrl);
                 $cardUrl = explode("/", $cardUrl);
                 $cardId = $cardUrl[0];
-                $cardId = str_replace(array('(',')'), array('',''), $cardId);
+                $cardId = str_replace(array('(', ')'), array('', ''), $cardId);
                 $cardId = trim($cardId);
 
                 for ($index = 1; $index < count($reqArr); $index++) {
@@ -68,11 +68,15 @@ while ($row = mysqli_fetch_assoc($res)) {
         $description = $trello_header . "\n" . $description;
 
         if ($cardId != '') {
-            
+
             $client = new Client();
             $client->authenticate(TRELLO_KEY, TRELLO_TOKEN, Client::AUTH_URL_CLIENT_ID);
             $manager = new Manager($client);
             $card = $manager->getCard($cardId);
+            $old_description = $card->getDescription();
+            if (trim($old_description) != '') {
+                $description = $old_description . $description;
+            }
             $card->setDescription($description)->save();
         }
     }
