@@ -27,7 +27,9 @@ $q = "SELECT * FROM `hg_patel`WHERE affecteduser = '$monitor_used_id' and activi
 $res = mysqli_query($conn, $q);
 while ($row = mysqli_fetch_assoc($res)) {
     if ($row['path'] != '' && $row['name'] != '') {
-
+        
+        $url =  urlencode(WEBDAV_PATH . $row['path']);
+        
         $c = curl_init(WEBDAV_PATH . $row['path']);
         curl_setopt($c, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
@@ -77,6 +79,7 @@ while ($row = mysqli_fetch_assoc($res)) {
             if (trim($old_description) != '') {
                 $description = $old_description . $description;
             }
+//            $description = str_replace(' ', '%20', $description);
             $card->setDescription($description)->save();
         }
     }
