@@ -37,7 +37,7 @@ while ($row = mysqli_fetch_assoc($res)) {
         $out = curl_exec($c);
         curl_close($c);
 
-        $outArr = explode("https://trello.com", $out);
+        $outArr = explode("https://trello.com", $out, 2);
 
         /* Variable declaration */
         $cardId = '';
@@ -52,6 +52,8 @@ while ($row = mysqli_fetch_assoc($res)) {
                 $cardUrl = str_replace("/c/", "", $cardUrl);
                 $cardUrl = explode("/", $cardUrl);
                 $cardId = $cardUrl[0];
+                $cardId = str_replace(array('(',')'), array('',''), $cardId);
+                $cardId = trim($cardId);
 
                 for ($index = 1; $index < count($reqArr); $index++) {
                     if (trim($reqArr[$index]) != '') {
@@ -66,6 +68,7 @@ while ($row = mysqli_fetch_assoc($res)) {
         $description = $trello_header . "\n" . $description;
 
         if ($cardId != '') {
+            
             $client = new Client();
             $client->authenticate(TRELLO_KEY, TRELLO_TOKEN, Client::AUTH_URL_CLIENT_ID);
             $manager = new Manager($client);
