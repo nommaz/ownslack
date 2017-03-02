@@ -24,10 +24,8 @@ $q = "SELECT * FROM `hg_patel`WHERE affecteduser = '$monitor_used_id' and activi
 $res = mysqli_query($conn, $q);
 while ($row = mysqli_fetch_assoc($res)) {
     if ($row['path'] != '' && $row['name'] != '') {
-        
-        $url =  urlencode(WEBDAV_PATH . $row['path']);
-        
-        $c = curl_init(WEBDAV_PATH . $row['path']);
+        $url = str_replace(' ', '%20', WEBDAV_PATH . $row['path']);
+        $c = curl_init($url);
         curl_setopt($c, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($c, CURLOPT_POST, false);
