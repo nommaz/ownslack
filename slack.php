@@ -43,6 +43,7 @@ while ($row = mysqli_fetch_assoc($res)) {
 
         $channelKey = implode("/", $pathArr);
         $channelname = findChannelName($channel_lookup, $channelKey . "/");
+        $channelname = (isset($channelname) && $channelname != '') ? $channelname : DEFAULT_CHANNEL;
         $channel = str_replace("#", "", $channelname);
         echo "  ---- Channel Selected = ";
         print_r($channel);
@@ -177,10 +178,10 @@ function findChannelName($channel_lookup, $path) {
         unset($pathArr[count($pathArr) - 1]);
         $channelKey = implode("/", $pathArr);
         if ($channelKey == '') {
-            return 'general';
+            return '';
         }
         return findChannelName($channel_lookup, $channelKey . "/");
     } else {
-        return (isset($channel_lookup[$path]) && $channel_lookup[$path] != '') ? $channel_lookup[$path] : 'general';
+        return (isset($channel_lookup[$path]) && $channel_lookup[$path] != '') ? $channel_lookup[$path] : '';
     }
 }
