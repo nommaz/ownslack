@@ -112,7 +112,8 @@ while ($row = mysqli_fetch_assoc($res)) {
                     $manager = new Manager($client);
                     $card = $manager->getCard($cardId);
                     $old_description = $card->getDescription();
-                    if (trim($old_description) != '') {
+                    if (trim($old_description) != '' && strpos($old_description, 'Content from') !== false) {
+                        $old_description = substr($old_description, 0, strpos($old_description, "Content from"));
                         $description = $old_description . $description;
                     }
 //            $description = str_replace(' ', '%20', $description);
