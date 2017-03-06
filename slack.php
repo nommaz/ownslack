@@ -14,7 +14,7 @@ $q = " SELECT  max(activity_id) AS activity_id, max(TIMESTAMP) AS timestamp, obj
         " GROUP BY object_id, displayname, type, name, file , size, mimetype " .
         " ORDER BY activity_id ASC;";
 
-//$q = "SELECT * FROM `hg_patel`WHERE affecteduser = '$monitor_used_id' and activity_id =247146 ORDER BY activity_id ASC;";
+$q = "SELECT * FROM `hg_patel`WHERE activity_id > $last_max_id ORDER BY activity_id ASC;";
 
 $res = mysqli_query($conn, $q);
 while ($row = mysqli_fetch_assoc($res)) {
@@ -176,9 +176,11 @@ function findChannelName($channel_lookup, $path) {
         $pathArr = explode("/", $path);
         unset($pathArr[count($pathArr) - 1]);
         $channelKey = implode("/", $pathArr);
-
+        if ($channelKey == '') {
+            return 'general';
+        }
         return findChannelName($channel_lookup, $channelKey . "/");
     } else {
-        return $channel_lookup[$path];
+        return (isset($channel_lookup[$path]) && $channel_lookup[$path] != '') ? $channel_lookup[$path] : 'general';
     }
 }
