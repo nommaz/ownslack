@@ -38,4 +38,9 @@ $dir = 'max_activity_id';
 $files1 = scandir($dir);
 $last_max_id = $files1[2];
 
-$trello_header='Content from docs\.hugin\.co [Edit](https://docs.hugin.co/index.php/apps/files/?fileid={{object_id}})';
+$trello_header = 'Content from docs\.hugin\.co [Edit](https://docs.hugin.co/index.php/apps/files/?fileid={{object_id}})';
+
+$trello_board_owncloud_path = array(
+    'UGM2XgLo' => '/Trello/'
+);
+$webdav_file_ext = ".md";
