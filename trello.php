@@ -10,9 +10,8 @@ use Trello\Client;
 use Trello\Manager;
 
 /* Variable declaration */
-$cardId = '5pJ8RSaJ';   //this card is from " changed label change events in trello " 
-
-if ($cardId != '') {
+if (isset($_GET['cardId']) && $_GET['cardId'] != '') {
+    $cardId = $_GET['cardId'];
 
     $client = new Client();
     $client->authenticate(TRELLO_KEY, TRELLO_TOKEN, Client::AUTH_URL_CLIENT_ID);
