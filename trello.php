@@ -22,25 +22,10 @@ if (isset($_GET['cardId']) && $_GET['cardId'] != '') {
     $boradId = $card->getBoardId();
 
 
-    $filecontent = '<img style="float: right;" src="https://docs.hugin.co/l">
-
-Owncloud markdown files to Trello card sync
-===========================================
-
-Project OwnTrello
------------------
-
-| **Author** |  **Date**  | **Ver.** | **Note** |
-| ---------- |:----------:|:--------:| -------- |
-| Vedat Nommaz | 2017-MM-DD | 0.1  | Document created |
-| |            |     | - |
-| |            |     | - |
-
-[](' . $card_url . ')
-
-###  1. Introduction
-Hugin uses Trello.com system to assign tasks to developers. Requirements are currently written as Word documents and are attached to Trello cards as Owncloud links.';
-
+    $templ_file = fopen(TRELLO_TEMPLATE_FILE, 'r');
+    $filecontent = fread($templ_file, filesize(TRELLO_TEMPLATE_FILE));
+    $filecontent = str_replace("{{CARD_URL}}", $card_url, $filecontent);
+    
     $boardData = $manager->getBoard($boradId);
     $userfriendlyBoradId = $boardData->getShortLink();
     if ($userfriendlyBoradId != '') {
