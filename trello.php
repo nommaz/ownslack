@@ -6,10 +6,10 @@ ini_set('display_startup_errors', 1);
 
 require_once("./vendor/detectlanguage/lib/detectlanguage.php");
 use DetectLanguage\DetectLanguage;
-DetectLanguage::setApiKey("bdddcb4ffbdd3baa857f42cd820e0e33");
 
 require 'vendor/autoload.php';
 include_once './config.php';
+DetectLanguage::setApiKey("bdddcb4ffbdd3baa857f42cd820e0e33");
 
 use Trello\Client;
 use Trello\Manager;
@@ -27,13 +27,14 @@ if (isset($_GET['cardId']) && $_GET['cardId'] != '') {
     $boradId = $card->getBoardId();
 
     $languageCode = DetectLanguage::simpleDetect($cardName);
+    $fileName = ($languageCode == 'en')?'en_':'tr_'.TRELLO_TEMPLATE_FILE;
+    $templ_file = fopen($fileName, 'r');
 
-    if ($languageCode == 'en') {
-	$templ_file = fopen('en_'.TRELLO_TEMPLATE_FILE, 'r');
-    }
-    else $templ_file = fopen('tr_'.TRELLO_TEMPLATE_FILE, 'r');
+echo $templ_file;
 
-    $filecontent = fread($templ_file, filesize(TRELLO_TEMPLATE_FILE));
+    $filecontent = fread($templ_file, filesize($fileName));
+echo $filecontent;
+
     $filecontent = str_replace("{{CARD_URL}}", $card_url, $filecontent);
 
     $boardData = $manager->getBoard($boradId);
