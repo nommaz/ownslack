@@ -15,10 +15,10 @@ Konu
 []({{CARD_URL}})
 
 ### 1. Giriş
-*BU döküman ne ile ilgili?*
+*Bu döküman ne ile ilgili?*
 
 ### 2. Tasarım detayı
-Optional design introduction
+Opsiyonel tasarım girişi
 
 #### 2.1. İkinci seviye başlık
 İkinci seviye metin
