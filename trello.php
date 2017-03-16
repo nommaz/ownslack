@@ -3,6 +3,11 @@
 ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
+
+require_once("./vendor/detectlanguage/lib/detectlanguage.php");
+use DetectLanguage\DetectLanguage;
+DetectLanguage::setApiKey("bdddcb4ffbdd3baa857f42cd820e0e33");
+
 require 'vendor/autoload.php';
 include_once './config.php';
 
@@ -21,11 +26,16 @@ if (isset($_GET['cardId']) && $_GET['cardId'] != '') {
     $card_url = $card->getShortUrl();
     $boradId = $card->getBoardId();
 
+    $languageCode = DetectLanguage::simpleDetect($cardName);
 
-    $templ_file = fopen(TRELLO_TEMPLATE_FILE, 'r');
+    if ($languageCode == 'en') {
+	$templ_file = fopen('en_'.TRELLO_TEMPLATE_FILE, 'r');
+    }
+    else $templ_file = fopen('tr_'.TRELLO_TEMPLATE_FILE, 'r');
+
     $filecontent = fread($templ_file, filesize(TRELLO_TEMPLATE_FILE));
     $filecontent = str_replace("{{CARD_URL}}", $card_url, $filecontent);
-    
+
     $boardData = $manager->getBoard($boradId);
     $userfriendlyBoradId = $boardData->getShortLink();
     if ($userfriendlyBoradId != '') {
@@ -65,6 +75,10 @@ if (isset($_GET['cardId']) && $_GET['cardId'] != '') {
             curl_close($c2);
             fclose($fh_res);
             unlink($file_path_str);
+
+            sleep(2);
+            exec('/usr/bin/php slack.php >> /var/log/ownslack/slack.log');
+
         }
         // generating file at owncloud server if not exist :: END
     }
