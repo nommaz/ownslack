@@ -27,7 +27,8 @@ if (isset($_GET['cardId']) && $_GET['cardId'] != '') {
     $boradId = $card->getBoardId();
 
     $languageCode = DetectLanguage::simpleDetect($cardName);
-    $fileName = ($languageCode == 'en')?'en_':'tr_'.TRELLO_TEMPLATE_FILE;
+echo $languageCode;
+    $fileName = (($languageCode == 'en')?'en_':'tr_').TRELLO_TEMPLATE_FILE;
     $templ_file = fopen($fileName, 'r');
 
 echo $templ_file;
